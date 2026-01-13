@@ -2,8 +2,12 @@
 Twitter/X client for tracking tweets about meme coins.
 """
 import tweepy
+import logging
 from typing import List, Dict
 import config
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 class TwitterClient:
@@ -54,6 +58,8 @@ class TwitterClient:
             tweets = []
             for tweet in response.data:
                 author = users.get(tweet.author_id)
+                # Use empty dict as fallback if public_metrics is None
+                metrics = tweet.public_metrics or {}
                 tweets.append({
                     'id': tweet.id,
                     'text': tweet.text,
@@ -64,16 +70,16 @@ class TwitterClient:
                         'name': author.name if author else 'Unknown'
                     },
                     'metrics': {
-                        'likes': tweet.public_metrics.get('like_count', 0),
-                        'retweets': tweet.public_metrics.get('retweet_count', 0),
-                        'replies': tweet.public_metrics.get('reply_count', 0)
+                        'likes': metrics.get('like_count', 0),
+                        'retweets': metrics.get('retweet_count', 0),
+                        'replies': metrics.get('reply_count', 0)
                     }
                 })
             
             return tweets
             
         except tweepy.TweepyException as e:
-            print(f"Error searching tweets: {e}")
+            logger.error(f"Error searching tweets: {e}")
             return []
     
     def build_coin_query(self, coin_symbol: str, coin_name: str = None) -> str:

@@ -3,7 +3,7 @@ Sentiment analysis module for analyzing tweet sentiment.
 Uses TextBlob for simple and effective sentiment analysis.
 """
 from textblob import TextBlob
-from typing import Dict, List
+from typing import Dict, List, Any
 
 
 class SentimentAnalyzer:
@@ -67,7 +67,7 @@ class SentimentAnalyzer:
         else:
             return '😐'
     
-    def aggregate_sentiment(self, sentiments: List[Dict[str, float]]) -> Dict[str, any]:
+    def aggregate_sentiment(self, sentiments: List[Dict[str, float]]) -> Dict[str, Any]:
         """
         Aggregate multiple sentiment scores.
         
